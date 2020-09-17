@@ -45,5 +45,6 @@ while running:
     screen.fill(BLACK)
     all_sprites.draw(screen)
     pygame.display.flip()
+    print("Second")
 
 pygame.quit()
