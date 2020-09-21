@@ -25,6 +25,10 @@ class Basket(pygame.sprite.Sprite):
                     self.rect.x -= 10
                 if event.key == pygame.K_RIGHT:
                     self.rect.x += 10
+                if self.rect.left > WIDTH :
+                    self.rect.x = 0
+                if self.rect.right < 0 :
+                    self.rect.x = WIDTH
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
