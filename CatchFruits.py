@@ -15,7 +15,10 @@ FLAG = 0
 SCORE = 0
 fruitsCounter = 0
 SCORE_STR = "Your score is : "
+BASKET_SPEED = 10
+SECOND_LEVEL_BASKET_SPEED = 15
 
+#класс корзинки
 class Basket(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -23,17 +26,9 @@ class Basket(pygame.sprite.Sprite):
         self.image.fill(GREEN)
         self.rect = self.image.get_rect()
         self.rect.center = (WIDTH / 2 , HEIGHT -30)
-    def update(self):
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    self.rect.x -= 10
-                if event.key == pygame.K_RIGHT:
-                    self.rect.x += 10
-                if self.rect.left > WIDTH :
-                    self.rect.x = 0
-                if self.rect.right < 0 :
-                    self.rect.x = WIDTH
 
+
+#класс фрукта
 class Fruits(pygame.sprite.Sprite):
 
     def __init__(self):
@@ -43,15 +38,8 @@ class Fruits(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (randint(0, WIDTH) , HEIGHT / 2)
 
-    def update(self):
-        if fruitsCounter < 5 :
-            self.rect.y += 4
-        elif (fruitsCounter >= 5 and fruitsCounter <= 15):
-            self.rect.y += 7
-        elif (fruitsCounter > 15 and fruitsCounter <= 25):
-            self.rect.y += 9
-        elif fruitsCounter > 25:
-            self.rect.y += 12
+
+
 
 pygame.init()
 font = pygame.font.Font(None, 70)
@@ -72,6 +60,28 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
+    #изменение скорости фруктов в зависимости от счетчика фруктов
+    if fruitsCounter < 5 :
+        fruit.rect.y += 4
+    elif (fruitsCounter >= 5 and fruitsCounter <= 15):
+        fruit.rect.y += 7
+        BASKET_SPEED = SECOND_LEVEL_BASKET_SPEED
+    elif (fruitsCounter > 15 and fruitsCounter <= 25):
+        fruit.rect.y += 9
+    elif fruitsCounter > 25:
+        fruit.rect.y += 12
+
+    #отлавливание нажатий на кнопки движения корзинки
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_LEFT:
+            basket.rect.x -= BASKET_SPEED
+        if event.key == pygame.K_RIGHT:
+            basket.rect.x += BASKET_SPEED
+        if basket.rect.left > WIDTH :
+            basket.rect.x = 0
+        if basket.rect.right < 0 :
+            basket.rect.x = WIDTH
 
     #проверка на то, что фрукт попал в корзинку
     if (fruit.rect.left > basket.rect.left and
