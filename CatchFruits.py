@@ -1,7 +1,9 @@
+#импорт библиотек
 import pygame
 import random
 from random import randint
 
+#задание глобальных переменных и констант
 WIDTH = 800
 HEIGHT = 600
 FPS = 30
@@ -11,10 +13,8 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
-FLAG = 0
-SCORE = 0
 fruitsCounter = 0
-SCORE_STR = "Your score is : "
+lifes = 3
 BASKET_SPEED = 10
 SECOND_LEVEL_BASKET_SPEED = 15
 
@@ -40,7 +40,7 @@ class Fruits(pygame.sprite.Sprite):
 
 
 
-
+#инициализация игрового процесса, создание объектов игры.
 pygame.init()
 font = pygame.font.Font(None, 70)
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
@@ -56,7 +56,7 @@ running = True
 while running:
     clock.tick(FPS)
 
-    #catch event
+    #отлавливание событий нажатий
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -90,16 +90,25 @@ while running:
            fruit.rect.x = randint(0, WIDTH)
            fruit.rect.y = 0
            fruitsCounter += 1
-    #иначе, если не попал в коризнку
+    #иначе, если не попал в коризнку - отнять одну жизнь
     elif fruit.rect.top > HEIGHT:
        fruit.rect.x = randint(0, WIDTH)
        fruit.rect.y = 0
-    text = font.render(str(fruitsCounter), True, [255, 255, 255])
-    textpos = (WIDTH / 2, 10)
+       lifes -= 1
+    #обнуление счетчиков и начало новой игры, если жизни кончились
+    if lifes == 0:
+        lifes = 3
+        fruitsCounter = 0
+        basket.rect.x = WIDTH /2 
+    #вывод на экран текста и отрисовка всех спрайтов
+    textScore = font.render(str(fruitsCounter), True, [255, 255, 255])
+    textScorePos = (WIDTH / 2, 10)
+    textLifes = font.render(str(lifes), True, [255, 255, 255])
+    textLifesPos = (WIDTH / 2, 70)
     all_sprites.update()
     screen.fill(BLACK)
-    screen.blit(text, textpos)
-    print(FLAG)
+    screen.blit(textScore, textScorePos)
+    screen.blit(textLifes, textLifesPos)
     all_sprites.draw(screen)
     pygame.display.flip()
 
